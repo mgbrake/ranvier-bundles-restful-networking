@@ -1,2 +1,3 @@
-# ranvier-bundles-restful-networking
-RESTful networking module to extend Ranvier Mud enging
+this bundle intends to create a RESTful API to interface with Ranvier
+
+
