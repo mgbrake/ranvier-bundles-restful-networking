@@ -90,10 +90,12 @@ exports.loginAccount = async function(accountname, state, socket, playerloadedca
             //Broadcast.prompt(currentPlayer);
             Logger.log("Character reconnected to new RESTful connection " + currentPlayer.name + " in " + currentPlayer.room + " with socket " + socket);
 
-
-            playerloadedcallback(currentPlayer);
-    
+            //player is already hydrated
             currentPlayer.socket.emit('commands', currentPlayer);
+            //Broadcast.prompt(currentPlayer);
+            playerloadedcallback(currentPlayer);
+            currentPlayer.emit('login');
+            
             return currentPlayer;
         }
     
@@ -105,8 +107,15 @@ exports.loginAccount = async function(accountname, state, socket, playerloadedca
         const loggedOffEventsManager = new LoggedOffEventsManager(state); 
         currentPlayer = await loggedOffEventsManager.load(currentPlayer);
 
-        playerloadedcallback(currentPlayer);
-        socket.emit('done', socket, { player: currentPlayer });
+        socket.emit('hydrate-player', socket, { player: currentPlayer, callback: 
+            () => {
+                state.CommandManager.get('look').execute(null, currentPlayer);
+                currentPlayer.socket.emit('commands', currentPlayer);
+                //Broadcast.prompt(currentPlayer);
+                
+                playerloadedcallback(currentPlayer);
+                currentPlayer.emit('login');
+        }});
         return currentPlayer;
     } catch (e) {
         Logger.error(e.message);
