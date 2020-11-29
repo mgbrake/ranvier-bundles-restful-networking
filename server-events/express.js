@@ -156,8 +156,7 @@ module.exports = {
         stream.attach(res);
         stream.setWriteMode('json');
 
-        res.write(`{ "RESTfulRanvier": [`
-        );
+        res.write(`{ "RESTfulRanvier": [`);
 
         // Register all of the input events (login, etc.)
         state.InputEventManager.attach(stream);
@@ -293,7 +292,7 @@ module.exports = {
               response.accountName = accountName;
               response.playerName = currentPlayer.name;
               response.commandGiven =  commandstring;
-              res.write(JSON.stringify( { actiontaken: response} ) + ",\n");
+              res.write(JSON.stringify( { type: "actiontaken", actiontaken: response} ) + ",\n");
 
               const action = state.CommandManager.get(cmd);
               if(action)
