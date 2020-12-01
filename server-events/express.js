@@ -30,7 +30,7 @@ module.exports = {
       //https.createServer(options, app).listen(443);
 
       const startServer = async () => {
-        const port = 80; //process.env.SERVER_PORT || 3000
+        const port = process.env.SERVER_PORT || 4002;
         await promisify(app.listen).bind(app)(port);
         Logger.log(`RESTful Listening on port ${port}`);
       }
